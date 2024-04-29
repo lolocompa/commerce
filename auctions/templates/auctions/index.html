@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    {% for element in listings %}
+    <a href="{% url "see_list" element.id %}" style="text-decoration:none; color:inherit">
+        <div class="container-listings">
+            <div style="margin-left:150px">
+                {% if element.image %}
+                <img src="{{element.image}}" alt="image" height=300  width=300>
+                {% endif %}
+            </div>
+            <div style="margin-left:300px; margin-top:40px">
+                <h2 style="margin-bottom:20px">{{ element.title }}</h2>
+                <h5 style="margin-bottom:20px">Price: ${{element.starting.number}}</h5>
+                {% if element.category %}
+                <h5>category: {{ element.category.category }}</h5>
+                {% endif %}
+                {% if element.watchlist == True %}
+                    <span style="color:white;margin-top:20px" class="badge bg-secondary">watchlist</span>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+{% endblock %}

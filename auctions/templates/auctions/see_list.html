@@ -1,0 +1,83 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if data.is_active == False and current_user == data.starting.bidder%}
+        <div class="alert alert-success" role="alert">
+            the list is closed and you won the auction
+        </div>
+    {% endif %}
+    <div style="margin-left:20px">
+        <h1 style="margin-bottom:20px">Listing: {{data.title}}
+            {% if data.watchlist == True %}
+                <span style="color:white;margin-top:20px" class="badge bg-secondary">watchlist</span>
+            {% endif %}
+        </h1>
+        <div class="box-see">
+            {% if data.image  %}
+                <img width=700 src="{{data.image}}" alt="image" height=400>
+            {% else %}
+                <h2>no image</h2>
+            {% endif %}
+        </div>
+        <h3 style="margin-top:15px">Description:</h3>
+        <p style="font-size:20px; margin-top:5px;">{{ data.description }}</p>
+        <h2 style="margin-top:50px">${{ data.starting.number }}</h2>
+        <form action="{% url "bid" %}" method="post">
+            {% csrf_token %}
+            <input type="number" name="bid" >
+            <input type="submit" class="btn btn-primary" value="place bid">
+            <input type="hidden" name="list_id" value="{{ data.id }}">
+        </form>
+        {% if current_user == data.starting.bidder %}
+            <p style="font-weight:lighter">your bid is the current bid</p>
+        {% endif %}
+        <h2 style="margin-top:20px">Details</h2>
+        <ul>
+            {% if data.category %}
+                <li>category: {{ data.category.category }}</li>
+            {% else %}
+                <li>no category</li>
+            {% endif %}
+            <li style="margin-bottom:30px">created from: {{ data.user }}</li>
+        </ul>
+        {% if data.watchlist == True %}
+            <form action="{% url 'watchlist' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="remove from watchlist" class="btn btn-secondary">
+                <input type="hidden" value="remove" name="watch">
+                <input type="hidden" value="{{ data.id }}" name="id">
+            </form>
+        {% else  %}
+            <form action="{% url 'watchlist' %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="add to watchlist" class="btn btn-secondary">
+                <input type="hidden" value="add" name="watch">
+                <input type="hidden" value="{{ data.id }}" name="id">
+            </form>
+        {% endif %}
+        {% if current_user == data.user and data.is_active == True %}
+            <form style="margin-top:40px" action="{% url "close_bid" %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-danger" type="submit" value="close bid" name="close_bid">
+                <input type="hidden" value="{{ data.id }}" name="close_list">
+            </form>
+        {% endif %}
+        <form action="{% url "comments" %}" method="post">
+            {% csrf_token %}
+            <div style="margin-top:70px">
+                <h3>comment</h3>
+                <textarea name="comment" cols="70" rows="5"></textarea>
+            </div>
+            <div style="margin-top:10px">
+                <input style="margin-bottom:90px" type="submit" class="btn btn-primary" value="submit">
+                <input type="hidden" value="{{ data.id }}" name="list_index">
+            </div>
+        </form>
+        {% for comment in comments %}
+            <div style="margin-bottom:40px">
+                <h5>commented by {{ comment.user }}</h5>
+                <p>{{ comment.comment }}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container-create">
+        <h2 style="margin-bottom:20px">create Listing</h2>
+        <form action="{% url "create_listing" %}" method="post">
+            {% csrf_token %}
+            <label style="margin-right:57px; margin-bottom:20px" for="title">title:</label>
+            <input type="text" name="title" id="title" required>
+            <br>
+            <div style="display:flex">
+                <p style="margin-right:10px">description:</p>
+                <textarea name="description" id="description" cols="22" rows="6" required></textarea>
+            </div>
+            <br>
+            <label style="margin-right:3px; margin-bottom:20px" for="starting_bid">starting bid:</label>
+            <input type="number" required id="starting_bid" name="starting_bid"  min="0.01" step="0.01" >
+            <br>
+            <h3 style="margin-left:80px">optional</h3>
+            <br>
+            <label style="margin-right:20px; margin-bottom:20px" for="image">image url:</label>
+            <input type="url" id="image" name="image">
+            <br>
+            <label style="margin-right:29px" for="category">category</label>
+            <input type="text" name="category" id="category">
+            <br>
+            <input type="hidden" name="user" value="{{ user.id }}">
+            <input style="margin-top:20px; margin-left:120px" class="btn btn-primary" value="create" type="submit">
+        </form>
+    </div>
+{% endblock %} 

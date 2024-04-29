@@ -1,0 +1,30 @@
+body {
+    padding: 10px;
+}
+
+.comments {
+    display: flex;
+    flex-direction: column;
+    border: solid black;
+}
+
+.container-create {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-listings {
+    display: flex;
+    background-color: #e5e7eb;
+    margin-left: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.box-see {
+    display: flex;
+    height: 400px;
+}
+
